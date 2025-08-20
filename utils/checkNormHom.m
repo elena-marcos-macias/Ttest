@@ -1,4 +1,4 @@
-function ANOVA_friendly = checkANOVA1f(Data, Group, Group_categories)
+function Parametric_friendly = checkNormHom(Data, Group, Group_categories)
 % CHECKANOVA1F Verifies the normality per group and the homogeneity per region.
 %
 % PREREQUISITES: MATLAB must have access to the file 'swtest.m' which is
@@ -16,7 +16,7 @@ function ANOVA_friendly = checkANOVA1f(Data, Group, Group_categories)
 
 nRegions = size(Data, 2);
 nGroup = length(Group_categories);
-ANOVA_friendly = zeros(1, nRegions);
+Parametric_friendly = zeros(1, nRegions);
 
 for r = 1:nRegions
     allGroupsNormal = true;
@@ -34,6 +34,6 @@ for r = 1:nRegions
     p_levene = vartestn(Data_region, Group, 'TestType', 'LeveneAbsolute', 'Display', 'off');
     isHomogeneous = p_levene > 0.05; % the H0 (non comparable distributions) cannot be discarded with enough confidence
 
-    ANOVA_friendly(r) = allGroupsNormal && isHomogeneous;
+    Parametric_friendly(r) = allGroupsNormal && isHomogeneous;
 end
 end

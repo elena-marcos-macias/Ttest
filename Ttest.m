@@ -61,7 +61,7 @@ group_categories = categories(group); % After reordering, refresh the group vari
 writetable(T_descriptives, resultsFileName, 'Sheet', [char(json.outputFileNames.descriptiveStatistics)]);
 
 
-%% VARIANCE ANALYSIS - ANOVA 1F
+%% T-TEST
 
 order = cellstr(string(json.inputDataSelection.groupOrder))';
 group = reordercats(group, order); % Order in which groups should appear

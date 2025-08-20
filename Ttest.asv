@@ -28,27 +28,25 @@ json = readstruct("data/instructionsTtest.json");
 fileName = char(json.inputDataSelection.fileName);
 T_Original = rmmissing(readtable(['./data/' fileName])); % Load and Remove rows that contain at least one NaN
 
-% === 1. All PREDICTOR variables ===
+% === 1. SCALAR Variables ===
     T_Data = selectColumns (T_Original,...
         json.inputDataSelection.columnCriteria.target_columns, ...
         json.inputDataSelection.columnCriteria.ignore_columns);
 
-    groupName = char(json.inputDataSelection.catVariable); % Identify categorical variables as such
+    data = table2array(T_Data); % Create an array with the variables' info so that we can later operate with it
 
-% -------- Select data to use (columns with string or numerical criteria) ---------------
-
-regions_unique = T_Data.Properties.VariableNames;
-nRegions = numel(regions_unique);
-
-% ------- Define categorical variable ('Group') and its categories ----------
- = char(json.inputDataSelection.groupName);
-[group, group_categories, nGroup] = getCategoricalGroup(T_Original, groupName);
+    regions_unique = T_Data.Properties.VariableNames; % Gets the names of all the scalar variables (in this case brain regions)
+    nRegions = numel(regions_unique); % Gets the number of scalar variables (number of brain regions)
 
 
-% -------- Prepare numeric data (array format) for analysis ---------
-data = table2array(T_Data);
+% === 2. CATEGORICAL Variables === 
+% Categorical variable that is going to define the groups amongst which we
+% are going to compare.
+    catVariable = char(json.inputDataSelection.catVariable); % Identify categorical variable as such
+    [group, group_categories, nGroup] = getCategoricalGroup(T_Original, catVariable);
 
-% ------- Prepare Excel file to save results -----------
+
+% === 3. Prepare Excel file to save results === 
 resultsFileName = [savePath char(json.outputFileNames.excelFileName)];
 
 %% DESCRIPTIVE ANALYSIS
@@ -63,7 +61,7 @@ group_categories = categories(group); % After reordering, refresh the group vari
 writetable(T_descriptives, resultsFileName, 'Sheet', [char(json.outputFileNames.descriptiveStatistics)]);
 
 
-%% VARIANCE ANALYSIS - ANOVA 1F
+%% T-TEST
 
 order = cellstr(string(json.inputDataSelection.groupOrder))';
 group = reordercats(group, order); % Order in which groups should appear
