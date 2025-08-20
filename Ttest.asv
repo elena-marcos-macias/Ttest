@@ -68,22 +68,75 @@ group = reordercats(group, order); % Order in which groups should appear
 group_categories = categories(group); % After reordering, refresh the group variable
 
 % ------------ Check normality and homogeneity ---------------
-ANOVA_friendly = checkANOVA1f(data, group, group_categories);
+parametric_friendly = checkNormHom(data, group, group_categories);
 
 %------------- Analysis of variance (ANOVA or KRUSKAL-WALLIS)---------------
-[T_VarianceAnalysis, p_variance] = variance1f_analysis(data, group, ANOVA_friendly, regions_unique);
+% Initialize storage
+    p_values = nan(1, nRegions);               % Vector of p-values
+    significance = strings(1, nRegions);       % Significance markers: '**', '*', or 'ns'
+    stat_values = nan(1, nRegions);            % T or WHICH IS NO PARAMETRICAL values
+    test_type = strings(1, nRegions);          % Record which test was used
+
+for r = 1:nRegions
+    % Region name (if needed)
+    % RegionName = regions_unique{r};
+
+    % Initialize containers for the two groups
+    matG1 = [];
+    matG2 = [];
+
+    for g = 1:nGroup
+        groupName = group_categories(g);
+
+        % Select data for this group and region
+        data_g_r = data(group == groupName, r);
+
+        % Store in correct matrix
+        if g == 1
+            matG1 = [matG1; data_g_r]; % append column
+        elseif g == 2
+            matG2 = [matG2; data_g_r];
+        end
+    end
+
+    if parametric_friendly(r) == 1
+        [~,p,~,tbl] = ttest2(matG1,matG2);
+        test_type(r) = 'T-test(T)';
+        stats = tbl{1,1}; % T-statistic: row 1, column 5
+    else
+        % No recuerdo cual es la no paramétrica
+    end
+
+
+    % Optional: do something with matG1, matG2 here
+end
+
+for r = 1:nRegions
+    nG1 = numel()
+    
+    for s = 1:numel(group)
+        if group(s) == group_categories{1}
+            matG1(s) = data (s,r);
+        else
+            matG2(s) = data (s,r);
+        end
+    end
+end
+
+
+[T_VarianceAnalysis, p_variance] = variance1f_analysis(data, group, parametric_friendly, regions_unique);
 % Save results as .xlsx
 writetable(T_VarianceAnalysis, resultsFileName, 'Sheet', [char(json.outputFileNames.varianceAnalysis)]);
 
 % ------------- Post-hoc - All comparisons (Tukey or Dunn-Bonferroni) -------
-T_posthoc_AllComparisons = posthoc1f_allcomparisons(data, group, group_categories, ANOVA_friendly, regions_unique);
+T_posthoc_AllComparisons = posthoc1f_allcomparisons(data, group, group_categories, parametric_friendly, regions_unique);
 % Save results as .xlsx
 writetable(T_posthoc_AllComparisons, resultsFileName, 'Sheet', [char(json.outputFileNames.posthoc_AllComparisons)]);
 
 % ------------- Post-hoc - Comparisons against control (Dunnett or Dunn-Bonferroni vs. control) -------
 controlGroup1 = char(json.inputDataSelection.groupControl.controlGroup1);
 controlGroup2 = char(json.inputDataSelection.groupControl.controlGroup2);
-[T_posthoc_vsControl1, T_posthoc_vsControl2] = posthoc1f_againstcontrol(data, group, regions_unique, ANOVA_friendly, nRegions, nGroup, controlGroup1, controlGroup2);
+[T_posthoc_vsControl1, T_posthoc_vsControl2] = posthoc1f_againstcontrol(data, group, regions_unique, parametric_friendly, nRegions, nGroup, controlGroup1, controlGroup2);
 % Save results as .xlsx
 writetable(T_posthoc_vsControl1, resultsFileName, 'Sheet', [char(json.outputFileNames.posthoc_vsControl1)]);
 writetable(T_posthoc_vsControl2, resultsFileName, 'Sheet', [char(json.outputFileNames.posthoc_vsControl2)]);
