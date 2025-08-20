@@ -22,8 +22,7 @@ function [Group, Group_categories, nGroup] = getCategoricalGroup(T_Original, gro
     % Extrae la columna y conviértela en variable categórica
     Group = categorical(T_Original{:, col_index});
     
-    % Convertir a categorical explícitamente para garantizar compatibilidad en comparaciones
-    Group_categories = categorical(categories(Group));
+   Group_categories = categories(Group);
     
     nGroup = numel(Group_categories);
 end

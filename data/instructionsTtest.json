@@ -5,10 +5,9 @@
                             "target_columns" : [4,22],
                             "ignore_columns" : [1,3]
                         },
-        "groupName" : "Genotype",
-        "groupOrder" : ["WT",
-                        "Het",
-                        "Hom"],
+        "catVariable" : "Death",
+        "groupOrder" : ["Alive",
+                        "Dead"],
         "groupControl" : {
                             "controlGroup1" : "WT",
                             "controlGroup2" : "Het"
