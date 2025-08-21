@@ -1,4 +1,4 @@
-% USE Ttest or non-parametric alternative. Compares the mean of two groups,
+% USE Ttest for independent measures or non-parametric alternative. Compares the mean of two groups,
 % per variable,but does not compare % across variables)
 %
 % INPUTS
@@ -71,74 +71,9 @@ group_categories = categories(group); % After reordering, refresh the group vari
 parametric_friendly = checkNormHom(data, group, group_categories);
 
 %------------- THIS IS GOING TO BE A FUNCTION BUT I HAVE IT HERE FOR THE TIME BEING ---------------
-% Initialize storage
-    p_values = nan(1, nRegions);               % Vector of p-values
-    significance = strings(1, nRegions);       % Significance markers: '**', '*', or 'ns'
-    stat_values = nan(1, nRegions);            % T or WHICH IS NO PARAMETRICAL values
-    test_type = strings(1, nRegions);          % Record which test was used
-
-for r = 1:nRegions
-    % Region name (if needed)
-    % RegionName = regions_unique{r};
-
-    % Initialize containers for the two groups
-    matG1 = [];
-    matG2 = [];
-
-    for g = 1:nGroup
-        groupName = group_categories(g);
-
-        % Select data for this group and region
-        data_g_r = data(group == groupName, r);
-
-        % Store in correct matrix
-        if g == 1
-            matG1 = [matG1; data_g_r]; % append column
-        elseif g == 2
-            matG2 = [matG2; data_g_r];
-        end
-    end
-
-    if parametric_friendly(r) == 1
-        [~,p,~,tbl] = ttest2(matG1,matG2);
-        test_type(r) = 'T-test(T)';
-        stats = tbl{1,1}; % T-statistic: row 1, column 1
-    else
-        % No recuerdo cual es la no paramétrica
-    end
-
-    % Determine significance level
-    if p < 0.01
-        sig = '**';
-    elseif p < 0.05
-        sig = '*';
-    else
-        sig = 'ns';
-    end
-
-    % Store results
-    p_values(r) = p;
-    stat_values(r) = stats;
-    significance(r) = sig;
-   
-end
-
-for r = 1:nRegions
-    nG1 = numel()
-    
-    for s = 1:numel(group)
-        if group(s) == group_categories{1}
-            matG1(s) = data (s,r);
-        else
-            matG2(s) = data (s,r);
-        end
-    end
-end
-
-
-[T_VarianceAnalysis, p_variance] = variance1f_analysis(data, group, parametric_friendly, regions_unique);
+[T_Ttest, p_Ttest] = indivGroups2_analysis(data, group, parametric_friendly, regions_unique);
 % Save results as .xlsx
-writetable(T_VarianceAnalysis, resultsFileName, 'Sheet', [char(json.outputFileNames.varianceAnalysis)]);
+writetable(T_Ttest, resultsFileName, 'Sheet', [char(json.outputFileNames.varianceAnalysis)]);
 
 % ------------- Post-hoc - All comparisons (Tukey or Dunn-Bonferroni) -------
 T_posthoc_AllComparisons = posthoc1f_allcomparisons(data, group, group_categories, parametric_friendly, regions_unique);
