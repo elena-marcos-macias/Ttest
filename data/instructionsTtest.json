@@ -13,7 +13,7 @@
         "excelFileName" : "FUS_test6_results.xlsx",
         "descriptiveStatistics" : "DescriptiveStatistics",
         "indivGroups2" : "IndividualGroups2",
-        "graphBar" : "Graph_MeanSDANOVA.fig"
+        "graphBar" : "Graph_MeanSDTtest.fig"
      },
     "wantGraph": "yes", 
     "graphSpecifications" : {
@@ -21,7 +21,7 @@
         "xAxisLabel" : "Brain Regions",
         "yAxisLabel" : "[1/1]",
         "highlightVariable": {
-            "showHighlightVariable": "yes",
+            "showHighlightVariable": "no",
             "highlightVariable": "Genotype",
             "trueHighlightVariable": "Hom"
         },
