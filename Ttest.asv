@@ -49,6 +49,8 @@ T_Original = rmmissing(readtable(['./data/' fileName])); % Load and Remove rows 
 % === 3. Prepare Excel file to save results === 
 resultsFileName = [savePath char(json.outputFileNames.excelFileName)];
 
+
+
 %% DESCRIPTIVE ANALYSIS
 
 order = cellstr(string(json.inputDataSelection.groupOrder))';
@@ -61,6 +63,7 @@ group_categories = categories(group); % After reordering, refresh the group vari
 writetable(T_descriptives, resultsFileName, 'Sheet', [char(json.outputFileNames.descriptiveStatistics)]);
 
 
+
 %% T-TEST
 
 order = cellstr(string(json.inputDataSelection.groupOrder))';
@@ -71,22 +74,10 @@ group_categories = categories(group); % After reordering, refresh the group vari
 parametric_friendly = checkNormHom(data, group, group_categories);
 
 %------------- THIS IS GOING TO BE A FUNCTION BUT I HAVE IT HERE FOR THE TIME BEING ---------------
-[T_Ttest, p_Ttest] = variance1f_analysis(data, group, parametric_friendly, regions_unique);
+[T_Ttest, p_Ttest] = indivGroups2_analysis(data, group, parametric_friendly, regions_unique);
 % Save results as .xlsx
-writetable(T_VarianceAnalysis, resultsFileName, 'Sheet', [char(json.outputFileNames.varianceAnalysis)]);
+writetable(T_Ttest, resultsFileName, 'Sheet', [char(json.outputFileNames.varianceAnalysis)]);
 
-% ------------- Post-hoc - All comparisons (Tukey or Dunn-Bonferroni) -------
-T_posthoc_AllComparisons = posthoc1f_allcomparisons(data, group, group_categories, parametric_friendly, regions_unique);
-% Save results as .xlsx
-writetable(T_posthoc_AllComparisons, resultsFileName, 'Sheet', [char(json.outputFileNames.posthoc_AllComparisons)]);
-
-% ------------- Post-hoc - Comparisons against control (Dunnett or Dunn-Bonferroni vs. control) -------
-controlGroup1 = char(json.inputDataSelection.groupControl.controlGroup1);
-controlGroup2 = char(json.inputDataSelection.groupControl.controlGroup2);
-[T_posthoc_vsControl1, T_posthoc_vsControl2] = posthoc1f_againstcontrol(data, group, regions_unique, parametric_friendly, nRegions, nGroup, controlGroup1, controlGroup2);
-% Save results as .xlsx
-writetable(T_posthoc_vsControl1, resultsFileName, 'Sheet', [char(json.outputFileNames.posthoc_vsControl1)]);
-writetable(T_posthoc_vsControl2, resultsFileName, 'Sheet', [char(json.outputFileNames.posthoc_vsControl2)]);
 
 
 %% --------------------- PLOT ----------------------------------

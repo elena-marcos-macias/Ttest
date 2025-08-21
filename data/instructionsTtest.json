@@ -7,30 +7,23 @@
                         },
         "catVariable" : "Death",
         "groupOrder" : ["Alive",
-                        "Dead"],
-        "groupControl" : {
-                            "controlGroup1" : "WT",
-                            "controlGroup2" : "Het"
-                        }
+                        "Dead"]
      },
     "outputFileNames" : {
         "excelFileName" : "FUS_test6_results.xlsx",
         "descriptiveStatistics" : "DescriptiveStatistics",
-        "varianceAnalysis" : "VarianceAnalysis",
-        "posthoc_AllComparisons" : "Posthoc_AllComparisons",
-        "posthoc_vsControl1" : "Posthoc_vsControl1",
-        "posthoc_vsControl2" : "Posthoc_vsControl2",
+        "indivGroups2" : "IndividualGroups2",
         "graphBar" : "Graph_MeanSDANOVA.fig"
-    },
-    "wantGraph": "no", 
+     },
+    "wantGraph": "yes", 
     "graphSpecifications" : {
         "graphTitle" : "FUS 18FDG-PET (normWB)",
         "xAxisLabel" : "Brain Regions",
         "yAxisLabel" : "[1/1]",
         "highlightVariable": {
             "showHighlightVariable": "yes",
-            "highlightVariable": "Death",
-            "trueHighlightVariable": "yes"
+            "highlightVariable": "Genotype",
+            "trueHighlightVariable": "Hom"
         },
         "Group1" :{
              "fillColor" : "white",

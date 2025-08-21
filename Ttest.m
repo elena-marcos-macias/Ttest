@@ -43,11 +43,13 @@ T_Original = rmmissing(readtable(['./data/' fileName])); % Load and Remove rows 
 % Categorical variable that is going to define the groups amongst which we
 % are going to compare.
     catVariable = char(json.inputDataSelection.catVariable); % Identify categorical variable as such
-    [group, group_categories, nGroup] = getCategoricalGroup(T_Original, catVariable);
+    [group, ~, nGroup] = getCategoricalGroup(T_Original, catVariable);
 
 
 % === 3. Prepare Excel file to save results === 
 resultsFileName = [savePath char(json.outputFileNames.excelFileName)];
+
+
 
 %% DESCRIPTIVE ANALYSIS
 
@@ -59,6 +61,7 @@ group_categories = categories(group); % After reordering, refresh the group vari
 [T_descriptives, mean_RegionGroup, sd_RegionGroup] = compute_descriptives(data, group, group_categories, regions_unique, nRegions, nGroup);
 % Save results as .xlsx
 writetable(T_descriptives, resultsFileName, 'Sheet', [char(json.outputFileNames.descriptiveStatistics)]);
+
 
 
 %% T-TEST
@@ -73,30 +76,18 @@ parametric_friendly = checkNormHom(data, group, group_categories);
 %------------- THIS IS GOING TO BE A FUNCTION BUT I HAVE IT HERE FOR THE TIME BEING ---------------
 [T_Ttest, p_Ttest] = indivGroups2_analysis(data, group, parametric_friendly, regions_unique);
 % Save results as .xlsx
-writetable(T_Ttest, resultsFileName, 'Sheet', [char(json.outputFileNames.varianceAnalysis)]);
+writetable(T_Ttest, resultsFileName, 'Sheet', [char(json.outputFileNames.indivGroups2)]);
 
-% ------------- Post-hoc - All comparisons (Tukey or Dunn-Bonferroni) -------
-T_posthoc_AllComparisons = posthoc1f_allcomparisons(data, group, group_categories, parametric_friendly, regions_unique);
-% Save results as .xlsx
-writetable(T_posthoc_AllComparisons, resultsFileName, 'Sheet', [char(json.outputFileNames.posthoc_AllComparisons)]);
-
-% ------------- Post-hoc - Comparisons against control (Dunnett or Dunn-Bonferroni vs. control) -------
-controlGroup1 = char(json.inputDataSelection.groupControl.controlGroup1);
-controlGroup2 = char(json.inputDataSelection.groupControl.controlGroup2);
-[T_posthoc_vsControl1, T_posthoc_vsControl2] = posthoc1f_againstcontrol(data, group, regions_unique, parametric_friendly, nRegions, nGroup, controlGroup1, controlGroup2);
-% Save results as .xlsx
-writetable(T_posthoc_vsControl1, resultsFileName, 'Sheet', [char(json.outputFileNames.posthoc_vsControl1)]);
-writetable(T_posthoc_vsControl2, resultsFileName, 'Sheet', [char(json.outputFileNames.posthoc_vsControl2)]);
 
 
 %% --------------------- PLOT ----------------------------------
 if strcmpi(char(json.wantGraph), 'yes')
-    jsonFilePath = "data/instructionsANOVA1f.json";
+    jsonFilePath = "data/instructionsTtest.json";
     json = readstruct(jsonFilePath);
     
     graphBar = plotBarWithStats(json, jsonFilePath, T_Original, T_Data, data, ...
                                 group, mean_RegionGroup, sd_RegionGroup, ...
-                                p_variance, nGroup, nRegions, savePath);
+                                p_Ttest, nGroup, nRegions, savePath);
 
     % Save results as .fig
     savefig(fullfile(savePath, json.outputFileNames.graphBar));
