@@ -11,7 +11,7 @@ This code is designed to perform a two group comparison, or its non-parametric a
   - Each **subsequent row** corresponds to one subject in the study.  
   - Each **column** represents a variable to be analyzed.  
   - One of the variables must be a **categorical grouping variable**, which is used to determine each subject’s group membership. *In this case, the variable “Genotipo” in column A serves as the categorical variable.*
-  - One of the variables can be another **categorical variable** which allow us to highlight certain subjects. *In column B, the variable "Muerte" indicates which animals died spontaneously during the experiment.*
+  - One of the variables can be another **categorical variable** which allow us to highlight certain subjects. *In column B, the variable "Death" indicates which animals died spontaneously during the experiment.*
   <img width="1172" height="569" alt="image" src="https://github.com/user-attachments/assets/97c14b2b-31b2-40e8-8f6a-3f5f7235fd98" />
 
 
@@ -22,12 +22,12 @@ This code is designed to perform a two group comparison, or its non-parametric a
 - Extract the contents of the `.zip` file. The directory should contain the following structure:
 
   - 📁 `data`: the only folder the user needs to modify.
-    - The file `instructionsANOVA1f.json` is a text file that **must** be edited by the user.
+    - The file `instructionsTtest.json` is a text file that **must** be edited by the user.
     - Paste your Excel file with the data into this folder.
   - 📁 `requirements`: external functions necessary for the script to run.
   - 📁 `results`: output folder where the resulting Excel (.xlsx) and MATLAB figure (.fig) files will be saved.
   - 📁 `utils`: internal functions required for the script.
-  - `ANOVA1f.m`: the main MATLAB script to be executed.
+  - `Ttest.m`: the main MATLAB script to be executed.
   - `README.md`: this documentation file.
   - There may be additional files not relevant to the user. **Do not delete them.**
 
@@ -37,9 +37,10 @@ Open the `data` folder and copy your Excel data file into it.
 
 ## Editing the JSON File
 
-Within the `data` folder, open the file `instructionsANOVA1f.json`. If you do not have a code editor (such as Visual Studio Code), you may use Notepad. You will see a structure similar to this:
+Within the `data` folder, open the file `instructionsTtest.json`. If you do not have a code editor (such as Visual Studio Code), you may use Notepad. You will see a structure similar to this:
 
-<img width="865" height="914" alt="image" src="https://github.com/user-attachments/assets/e6d78cb6-8338-4f21-b413-c1011ac26f35" />
+<img width="780" height="700" alt="image" src="https://github.com/user-attachments/assets/b93fbf92-cdc6-4d62-a619-9f55b6e0016a" />
+
 
 
 Follow these steps to modify the JSON file appropriately:
