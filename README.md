@@ -100,4 +100,4 @@ Once all necessary fields have been edited, save the `.json` file. It is not nec
 
 ## Running the Script
 
-Open the `ANOVA1f.m` script in the main directory using MATLAB and run it by clicking the **RUN** button.
+Open the `Ttest.m` script in the main directory using MATLAB and run it by clicking the **RUN** button.
