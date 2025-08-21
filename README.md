@@ -65,18 +65,14 @@ Follow these steps to modify the JSON file appropriately:
           - **Numeric**: Specify the ranges of columns to be ignored using pairs of indices.  
           *Example: to ignore columns A–C and J–M, write `[1,3,10,13]`.*
   -  `"groupName"`: Name of the grouping variable. This must match the column header in the Excel file.  
-   *In the example data, this would be column A, labeled "Genotipo".*
+   *In the example data, this would be column A, labeled "Death".*
   -  `"groupOrder"`: List the categories of the grouping variable in the order you want them displayed in the graph (up to four categories). **All of the existing categories must be listed, regardless of you wanting them to appear in the graph or not.** ~LO QUIERO CAMBIAR PARA QUE PUEDAS SELECCIONAR CATEGORÍAS Y NO TENENGAS QUE USAR TODAS~
-   *Example: `["WT", "Het", "Hom"]`.*
-  -  `"groupControl"`: Specify the groups to be treated as control groups for the post-hoc Dunnett test (and its non-parametric equivalent).
+   *Example: `["Alive", "Dead"]`.*
 
 3  **"outputFileNames"**:
   - `"excelFileName"`: File name (including `.xlsx` extension) for the Excel file containing the results from the analysis.  
   -  `"descriptiveStatistics"`: name of the Sheet containing the descriptive statistics, in the results' Excel file. The output includes group sample sizes, means, and standard deviations.
-  -  `"varianceAnalysis"`: name of the Sheet containing the ANOVA (or non-parametric equivalent) results, in the results' Excel file.  Includes F-statistic (for ANOVA), Chi² (for non-parametric), p-values, and significance indicators.
-  -  `"posthoc_AllComparisons"`: name of the Sheet containing the results from Tukey’s post-hoc test (and non-parametric alternative), in the results' Excel file. Includes p-values and significance indicators.
-  -  `"posthoc_vsControl1"`: name of the Sheet containing the results from the Dunnett post-hoc test against `"controlGroup1"` (and its non-parametric alternative), in the results' Excel file. Includes p-values and significance indicators.
-  -  `"posthoc_vsControl2"`: name of the Sheet containing the results from the Dunnett post-hoc test against `"controlGroup2"` (and its non-parametric alternative), in the results' Excel file. Includes p-values and significance indicators.
+  -  `"indivGroups2"`: name of the Sheet containing the Ttest (or non-parametric equivalent) results, in the results' Excel file.  Includes T-statistic (for ANOVA), Z (for non-parametric), p-values, and significance indicators.
   -  `"graphBar"`: File name (with `.fig` extension) for the MATLAB figure output.
 
  4 **`"wantGraph"`**: complete with yes or no, depending on wheather or not you want to generate a graph with the mean and standar deviation results. The graph also includes the individual points for each subject and significance markers (ANOVA results). Here is an example of said graph.
