@@ -51,7 +51,7 @@ function [T_Ttest, p_values] = indivGroups2_analysis(data, group, parametric_fri
             test_type(r) = 'T-test(T)';
             stats = double(tbl.tstat); % T-statistic: is called tstat in the struct tbl
         else
-            [p,~,tbl] = ranksum(matG1,matG2);
+            [p,~,tbl] = ranksum(matG1,matG2,'method','approximate');
             test_type(r) = 'Wilcoxon(Z)';
             stats = double(tbl.zval); % Z-statistic: is called zval in the struct tbl
         end
